@@ -1,69 +1,77 @@
 import { Flex, Spin } from "antd";
+import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
-const VirtualizedList = <T,>({
-  items,
-  renderItem,
-  itemHeight,
-  containerHeight,
-  loading,
-}: {
-  items: T[];
-  renderItem: (item: T, index: number) => JSX.Element;
-  itemHeight: number;
-  containerHeight: number;
-  loading: boolean;
-}) => {
-  const [scrollTop, setScrollTop] = useState(0);
+const VirtualizedList = observer(
+  <T,>({
+    items,
+    renderItem,
+    itemHeight,
+    containerHeight,
+    nodePadding,
+    loading,
+    loadingItem,
+  }: {
+    items: T[];
+    renderItem: (item: T, index: number) => JSX.Element;
+    itemHeight: number;
+    containerHeight: number;
+    nodePadding: number;
+    loading: boolean;
+    loadingItem: JSX.Element;
+  }) => {
+    const [scrollTop, setScrollTop] = useState(0);
 
-  const startIndex = Math.floor(scrollTop / itemHeight);
+    let startNode = Math.floor(scrollTop / itemHeight) - nodePadding;
+    startNode = Math.max(0, startNode);
 
-  const endIndex = Math.min(
-    startIndex + Math.ceil(containerHeight / itemHeight) + 1,
-    items.length
-  );
+    let visibleNodesCount =
+      Math.ceil(containerHeight / itemHeight) + 2 * nodePadding;
 
-  const visibleItems = items.slice(startIndex, endIndex);
+    visibleNodesCount = Math.min(items.length - startNode, visibleNodesCount);
 
-  const invisibleItemsHeight =
-    (startIndex + visibleItems.length - endIndex) * itemHeight;
+    const visibleItems = items.slice(startNode, startNode + visibleNodesCount);
 
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop((event.target as HTMLDivElement).scrollTop);
-  };
+    const totalContentHeight = items.length * itemHeight;
+    const offsetY = startNode * itemHeight;
 
-  return (
-    <div
-      style={{
-        height: `${containerHeight}px`,
-        overflowY: "auto",
-        position: "relative",
-      }}
-      onScroll={handleScroll}
-    >
-      <div style={{ height: `${items.length * itemHeight}px` }}>
-        <Flex
-          vertical
-          gap="middle"
-          align="center"
-          justify="center"
-          style={{
-            position: "relative",
-            height: `${visibleItems.length * itemHeight}px`,
-            top: `${startIndex * itemHeight}px`,
-          }}
-        >
-          {items
-            .slice(startIndex, endIndex)
-            .map((item, index) => renderItem(item, startIndex + index))}
-          <div style={{ height: `${invisibleItemsHeight}px` }} />
-        </Flex>
+    const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+      setScrollTop((event.target as HTMLDivElement).scrollTop);
+    };
+
+    return (
+      <div
+        style={{
+          height: containerHeight,
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+        onScroll={handleScroll}
+      >
+        <div style={{ height: totalContentHeight }}>
+          <Flex
+            vertical
+            gap="middle"
+            style={{
+              transform: `translateY(${offsetY}px)`,
+            }}
+          >
+            {visibleItems.map((item, index) =>
+              renderItem(item, startNode + index)
+            )}
+            {loading && (
+              <>
+                {[...Array(1)].map((_, index) => (
+                  <div key={index}>{loadingItem}</div>
+                ))}
+                <Spin spinning style={{ margin: "10px auto", width: "100%" }} />
+              </>
+            )}
+          </Flex>
+        </div>
       </div>
-      {loading && (
-        <Spin spinning style={{ margin: "5px auto", width: "100%" }} />
-      )}
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default VirtualizedList;

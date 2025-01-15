@@ -13,5 +13,19 @@ export const useShowActions = () => {
     showsStore.removeShow(id);
   };
 
-  return { handleLike, handleUnlike, handleRemove };
+  const handleChangeName = (id: number, name: string) => {
+    showsStore.updateShow(id, { name: name });
+  };
+
+  const handleChangeOverview = (id: number, overview: string) => {
+    showsStore.updateShow(id, { overview: overview });
+  };
+
+  return {
+    handleLike,
+    handleUnlike,
+    handleRemove,
+    handleChangeName,
+    handleChangeOverview,
+  };
 };

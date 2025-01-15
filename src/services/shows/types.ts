@@ -16,7 +16,7 @@ export interface Show {
   overview: string;
   popularity: number;
   poster_path: null | string;
-  first_air_date: Date;
+  first_air_date: string;
   name: string;
   vote_average: number;
   vote_count: number;

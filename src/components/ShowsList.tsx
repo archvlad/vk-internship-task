@@ -9,16 +9,23 @@ const { Title } = Typography;
 
 const ShowsList = observer(() => {
   const observer = useRef<IntersectionObserver>();
-
+  
   const lastElementRef = useCallback((node: HTMLDivElement | null) => {
     if (showsStore.loading) return;
     if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        showsStore.setPage(showsStore.page + 1);
-        showsStore.fetchShows();
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          showsStore.setPage(showsStore.page + 1);
+          showsStore.fetchShows();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
       }
-    });
+    );
     if (node) observer.current.observe(node);
   }, []);
 
@@ -27,35 +34,35 @@ const ShowsList = observer(() => {
   }, []);
 
   return (
-    <>
-      <Flex gap="middle" align="center" justify="center" vertical>
-        <Title level={3}>TV Shows</Title>
-        <div
-          style={{
-            maxWidth: 500,
-            width: "-webkit-fill-available",
-          }}
-        >
-          <Flex vertical gap="middle" align="center" justify="center">
-            <VirtualizedList
-              items={showsStore.shows}
-              loading={showsStore.loading}
-              renderItem={(show: StoredShow, index: number) => {
-                if (showsStore.shows.length == index + 1) {
-                  return (
-                    <ShowCard key={show.id} ref={lastElementRef} show={show} />
-                  );
-                } else {
-                  return <ShowCard key={show.id} show={show} />;
-                }
-              }}
-              itemHeight={450}
-              containerHeight={900}
-            />
-          </Flex>
-        </div>
-      </Flex>
-    </>
+    <Flex gap="middle" align="center" justify="center" vertical>
+      <Title level={3}>TV Shows</Title>
+      <div
+        style={{
+          maxWidth: 500,
+          width: "-webkit-fill-available",
+        }}
+      >
+        <Flex vertical gap="middle" align="center" justify="center">
+          <VirtualizedList
+            items={showsStore.shows}
+            loading={showsStore.loading}
+            renderItem={(show: StoredShow, index: number) => {
+              if (showsStore.shows.length == index + 1) {
+                return (
+                  <ShowCard key={show.id} ref={lastElementRef} show={show} />
+                );
+              } else {
+                return <ShowCard key={show.id} show={show} />;
+              }
+            }}
+            loadingItem={<ShowCard isSkeleton />}
+            itemHeight={492}
+            containerHeight={984}
+            nodePadding={2}
+          />
+        </Flex>
+      </div>
+    </Flex>
   );
 });
 
