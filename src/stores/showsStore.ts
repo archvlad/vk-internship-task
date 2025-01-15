@@ -6,10 +6,11 @@ export interface StoredShow extends Show {
   liked?: boolean;
 }
 
-class ShowsStore {
+export class ShowsStore {
   page: number = 1;
   loading: boolean = true;
   shows: StoredShow[] = [];
+  error: Error | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -42,9 +43,9 @@ class ShowsStore {
   }
 
   async fetchShows() {
-    this.setLoading(true);
-    const data = await getShows(this.page);
-    setTimeout(() => {
+    try {
+      this.setLoading(true);
+      const data = await getShows(this.page);
       this.setShows([
         ...this.shows,
         ...data.map<StoredShow>((show: Show) => {
@@ -54,8 +55,11 @@ class ShowsStore {
           };
         }),
       ]);
+    } catch (error) {
+      this.error = error as Error;
+    } finally {
       this.setLoading(false);
-    }, 2000);
+    }
   }
 }
 

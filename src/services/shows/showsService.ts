@@ -4,6 +4,7 @@ import { DiscoverTVResponse } from "./types";
 const DISCOVER_TV_ENDPOINT = "discover/tv";
 
 export const getShows = async (page: number) => {
+  console.log("getShows");
   const response = await axiosClient.get(DISCOVER_TV_ENDPOINT, {
     params: {
       include_adult: false,
