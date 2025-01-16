@@ -45,6 +45,7 @@ const VirtualizedList = observer(
           height: containerHeight,
           overflowY: "auto",
           overflowX: "hidden",
+          width: 400,
         }}
         onScroll={handleScroll}
       >

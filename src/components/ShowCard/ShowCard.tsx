@@ -44,7 +44,11 @@ const ShowCard = (
             preview={false}
             alt={props.show?.name}
             height={225}
-            style={{ objectFit: "cover", borderRadius: "8px 8px 0 0" }}
+            style={{
+              objectFit: "cover",
+              borderRadius: "8px 8px 0 0",
+              border: "1px solid #f0f0f0",
+            }}
             src={
               props.show
                 ? `https://image.tmdb.org/t/p/original${props.show.backdrop_path}`
@@ -83,8 +87,14 @@ const ShowCard = (
               <Text type="secondary">Country: </Text>
               <Text>{props.show.origin_country[0]}</Text>
             </div>
-            <Text type="secondary">Release: </Text>
-            <Text>{props.show.first_air_date}</Text>
+            <div>
+              <Text type="secondary">Release: </Text>
+              <Text>{props.show.first_air_date}</Text>
+            </div>
+            <div>
+              <Text type="secondary">Popularity: </Text>
+              <Text>{props.show.popularity}</Text>
+            </div>
           </div>
           <Typography.Paragraph
             ellipsis={{

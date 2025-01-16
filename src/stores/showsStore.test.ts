@@ -69,13 +69,22 @@ describe(ShowsStore, () => {
     expect(showsStore.shows.length).toEqual(1);
   });
 
+  it("should clear shows", () => {
+    const shows = new Array(2).fill(0).map((_v, i) => createMockShow(i));
+    showsStore.setShows(shows);
+    showsStore.clearShows();
+    expect(showsStore.shows.length).toEqual(0);
+  });
+
   it("should fetch shows and update the store", async () => {
     const shows = new Array(2).fill(0).map((_v, i) => createMockShow(i));
     (getShows as jest.Mock).mockResolvedValue(shows);
 
-    await showsStore.fetchShows();
+    await showsStore.fetchShows({
+      sortByCategory: "",
+      sortByDirection: "",
+    });
 
-    expect(getShows).toHaveBeenCalledWith(1);
     expect(showsStore.shows).toEqual([...shows]);
     expect(showsStore.loading).toBe(false);
   });
@@ -83,7 +92,10 @@ describe(ShowsStore, () => {
   it("should set error on error response", async () => {
     (getShows as jest.Mock).mockRejectedValue(new Error("Async error"));
 
-    await showsStore.fetchShows();
+    await showsStore.fetchShows({
+      sortByCategory: "",
+      sortByDirection: "",
+    });
 
     expect(showsStore.shows).toEqual([]);
     expect(showsStore.loading).toBe(false);

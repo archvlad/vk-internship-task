@@ -1,37 +1,59 @@
 import { observer } from "mobx-react-lite";
 import showsStore, { StoredShow } from "../stores/showsStore";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Flex } from "antd";
 import { Typography } from "antd";
 import ShowCard from "./ShowCard";
 import VirtualizedList from "./VirtualizedList";
+import SortBySelect from "./FilterCategorySelect";
 const { Title } = Typography;
 
 const ShowsList = observer(() => {
   const observer = useRef<IntersectionObserver>();
-  
-  const lastElementRef = useCallback((node: HTMLDivElement | null) => {
-    if (showsStore.loading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          showsStore.setPage(showsStore.page + 1);
-          showsStore.fetchShows();
+
+  const [sortByCategory, setSortByCategory] = useState<string>("popularity");
+  const [sortByDirection, setSortByDirection] = useState<string>("desc");
+
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (showsStore.loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            showsStore.setPage(showsStore.page + 1);
+            showsStore.fetchShows({
+              sortByCategory,
+              sortByDirection,
+            });
+          }
+        },
+        {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.1,
         }
-      },
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.1,
-      }
-    );
-    if (node) observer.current.observe(node);
-  }, []);
+      );
+      if (node) observer.current.observe(node);
+    },
+    [sortByCategory, sortByDirection]
+  );
+
+  const handleSortByChange = (
+    sortByCategory: string,
+    sortByDirection: string
+  ) => {
+    setSortByCategory(sortByCategory);
+    setSortByDirection(sortByDirection);
+  };
 
   useEffect(() => {
-    showsStore.fetchShows();
-  }, []);
+    showsStore.clearShows();
+    showsStore.fetchShows({
+      sortByCategory,
+      sortByDirection,
+    });
+  }, [sortByCategory, sortByDirection]);
 
   return (
     <Flex gap="middle" align="center" justify="center" vertical>
@@ -43,6 +65,11 @@ const ShowsList = observer(() => {
         }}
       >
         <Flex vertical gap="middle" align="center" justify="center">
+          <SortBySelect
+            onChange={handleSortByChange}
+            sortByCategory={sortByCategory}
+            sortByDirection={sortByDirection}
+          />
           <VirtualizedList
             items={showsStore.shows}
             loading={showsStore.loading}

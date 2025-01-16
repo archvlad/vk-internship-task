@@ -28,6 +28,10 @@ export class ShowsStore {
     this.shows = shows;
   }
 
+  clearShows() {
+    this.shows = [];
+  }
+
   updateShow(id: number, show: Partial<StoredShow>) {
     const index = this.shows.findIndex((show) => show.id === id);
     if (index !== -1) {
@@ -42,10 +46,17 @@ export class ShowsStore {
     this.shows = this.shows.filter((show) => show.id !== id);
   }
 
-  async fetchShows() {
+  async fetchShows(options: {
+    sortByCategory: string;
+    sortByDirection: string;
+  }) {
     try {
       this.setLoading(true);
-      const data = await getShows(this.page);
+      const data = await getShows(
+        this.page,
+        options.sortByCategory,
+        options.sortByDirection
+      );
       this.setShows([
         ...this.shows,
         ...data.map<StoredShow>((show: Show) => {
