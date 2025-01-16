@@ -1,4 +1,5 @@
 import { Space, Select } from "antd";
+import styles from "./SortBySelect.module.css";
 
 const sortByCategories = [
   { value: "first_air_date", label: "Release" },
@@ -38,13 +39,13 @@ const SortBySelect = ({
           onChange={handleCategoryChange}
           options={sortByCategories}
           placeholder="Select category"
-          style={{ width: 130 }}
+          className={styles.select}
         />
         <Select
           value={sortByDirection}
           onChange={handleDirectionChange}
           options={sortByDirections}
-          style={{ width: 130 }}
+          className={styles.select}
           placeholder="Select direction"
         />
       </Space.Compact>

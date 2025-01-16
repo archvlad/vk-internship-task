@@ -1,14 +1,15 @@
 import { observer } from "mobx-react-lite";
-import showsStore, { StoredShow } from "../stores/showsStore";
+import showsStore, { StoredShow } from "@stores/showsStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Flex } from "antd";
 import { Typography } from "antd";
-import ShowCard from "./ShowCard";
-import VirtualizedList from "./VirtualizedList";
-import SortBySelect from "./FilterCategorySelect";
+import ShowCard from "@components/ShowCard";
 const { Title } = Typography;
+import styles from "./ShowsViewer.module.css";
+import VirtualizedList from "@components/VirtualizedList";
+import SortBySelect from "@components/FilterCategorySelect";
 
-const ShowsList = observer(() => {
+const ShowsViewer = observer(() => {
   const observer = useRef<IntersectionObserver>();
 
   const [sortByCategory, setSortByCategory] = useState<string>("popularity");
@@ -47,6 +48,14 @@ const ShowsList = observer(() => {
     setSortByDirection(sortByDirection);
   };
 
+  const renderItem = (show: StoredShow, index: number) => {
+    if (showsStore.shows.length == index + 1) {
+      return <ShowCard key={show.id} ref={lastElementRef} show={show} />;
+    } else {
+      return <ShowCard key={show.id} show={show} />;
+    }
+  };
+
   useEffect(() => {
     showsStore.clearShows();
     showsStore.fetchShows({
@@ -58,12 +67,7 @@ const ShowsList = observer(() => {
   return (
     <Flex gap="middle" align="center" justify="center" vertical>
       <Title level={3}>TV Shows</Title>
-      <div
-        style={{
-          maxWidth: 500,
-          width: "-webkit-fill-available",
-        }}
-      >
+      <div className={styles.main}>
         <Flex vertical gap="middle" align="center" justify="center">
           <SortBySelect
             onChange={handleSortByChange}
@@ -73,15 +77,7 @@ const ShowsList = observer(() => {
           <VirtualizedList
             items={showsStore.shows}
             loading={showsStore.loading}
-            renderItem={(show: StoredShow, index: number) => {
-              if (showsStore.shows.length == index + 1) {
-                return (
-                  <ShowCard key={show.id} ref={lastElementRef} show={show} />
-                );
-              } else {
-                return <ShowCard key={show.id} show={show} />;
-              }
-            }}
+            renderItem={renderItem}
             loadingItem={<ShowCard isSkeleton />}
             itemHeight={492}
             containerHeight={984}
@@ -93,4 +89,4 @@ const ShowsList = observer(() => {
   );
 });
 
-export default ShowsList;
+export default ShowsViewer;

@@ -1,5 +1,5 @@
-import ShowsList from "./components/ShowsList";
+import ShowsViewer from "@components/ShowsViewer";
 
-const App = () => <ShowsList />;
+const App = () => <ShowsViewer />;
 
 export default App;

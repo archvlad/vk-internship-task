@@ -1,6 +1,7 @@
 import { Flex, Spin } from "antd";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import styles from "./VirtualizedList.module.css";
 
 const VirtualizedList = observer(
   <T,>({
@@ -41,11 +42,9 @@ const VirtualizedList = observer(
 
     return (
       <div
+        className={styles.container}
         style={{
           height: containerHeight,
-          overflowY: "auto",
-          overflowX: "hidden",
-          width: 400,
         }}
         onScroll={handleScroll}
       >

@@ -1,0 +1,28 @@
+.card {
+  max-width: 400px;
+  width: -webkit-fill-available
+}
+
+.coverContainer {
+  overflow: hidden;
+}
+
+.skeletonPlaceholder {
+  width: 400px !important;
+  height: 225px !important;
+}
+
+.imageStyle {
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #f0f0f0;
+}
+
+.title {
+  margin: 0 !important
+}
+
+.overview {
+  margin: 0 !important;
+  height: 90px
+}
