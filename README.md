@@ -1,50 +1,33 @@
-# React + TypeScript + Vite
+![example workflow](https://github.com/archvlad/vk-internship-task/actions/workflows/ci.yml/badge.svg)
+# Задание для стажировки Frontend Developer
+Необходимо получить с сервера и отобразить список элементов. Список должен поддерживать бесконечный плавный скролл, постепенную подгрузку элементов, локальное удаление и редактирование.
+## Технологии
+- **TypeScript**
+- **React**
+- **MobX**
+- **Ant Design** - выбрал данный UI Kit из-за большого количества компонентов и приятного дизайна + давно хотел применить на практике.
+## Установка и запуск
+### Локально
+1. Установите зависимости:
+   ```bash
+   npm ci
+   ```
+2. Запустите приложение в режиме разработки:
+   ```bash
+   npm run dev
+   ```
+3. Откройте по адресу [http://localhost:5173/](http://localhost:5173/)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Через Docker
+1. Постройте Docker-образ:
+   ```bash
+   docker build -t archvlad-vk-internship-task .
+   ```
+2. Запустите контейнер:
+   ```bash
+   docker run -d -p 3000:80 archvlad-vk-internship-task
+   ```
+3. Откройте по адресу [http://localhost:3000/](http://localhost:3000/)
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Важно
+Приложение использует [The Movie Database API](https://www.themoviedb.org/), которое блокирует запросы с территории РФ, поэтому для корректной работы следует использовать VPN.
