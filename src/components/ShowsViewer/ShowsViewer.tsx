@@ -57,6 +57,7 @@ const ShowsViewer = observer(() => {
   };
 
   useEffect(() => {
+    showsStore.setPage(1);
     showsStore.clearShows();
     showsStore.fetchShows({
       sortByCategory,
