@@ -1,4 +1,5 @@
 import axiosClient from "@services/axiosClient";
+
 import { DiscoverTVResponse } from "./types";
 
 const DISCOVER_TV_ENDPOINT = "discover/tv";

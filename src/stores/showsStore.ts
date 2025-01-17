@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
-import { Show } from "../services/shows/types";
+
 import { getShows } from "../services/shows/showsService";
+import { Show } from "../services/shows/types";
 
 export interface StoredShow extends Show {
   liked?: boolean;

@@ -1,15 +1,17 @@
-import { Card, Flex, Image, Skeleton } from "antd";
-import { forwardRef, LegacyRef } from "react";
-import { Typography } from "antd";
 import { truncate } from "@helpers/textUtils";
 import { StoredShow } from "@stores/showsStore";
+import { Card, Flex, Image, Skeleton } from "antd";
+import { Typography } from "antd";
+import { forwardRef, LegacyRef } from "react";
+
 import ShowCardActions from "./ShowCardActions";
 const { Text } = Typography;
 const { Title } = Typography;
 import { HighlightOutlined } from "@ant-design/icons";
-import { useShowActions } from "@hooks/useShowActions";
-import styles from "./ShowCard.module.css";
 import { FALLBACK_IMAGE } from "@constants/images";
+import { useShowActions } from "@hooks/useShowActions";
+
+import styles from "./ShowCard.module.css";
 
 type ShowCardProps = {
   show?: StoredShow;

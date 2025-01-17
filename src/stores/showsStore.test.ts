@@ -1,5 +1,5 @@
-import { ShowsStore, StoredShow } from "./showsStore";
 import { getShows } from "../services/shows/showsService";
+import { ShowsStore, StoredShow } from "./showsStore";
 
 jest.mock("../services/shows/showsService", () => ({
   getShows: jest.fn(),

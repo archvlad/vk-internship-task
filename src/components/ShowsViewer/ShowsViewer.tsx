@@ -1,13 +1,14 @@
-import { observer } from "mobx-react-lite";
+import ShowCard from "@components/ShowCard";
 import showsStore, { StoredShow } from "@stores/showsStore";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { Flex } from "antd";
 import { Typography } from "antd";
-import ShowCard from "@components/ShowCard";
+import { observer } from "mobx-react-lite";
+import { useCallback, useEffect, useRef, useState } from "react";
 const { Title } = Typography;
-import styles from "./ShowsViewer.module.css";
-import VirtualizedList from "@components/VirtualizedList";
 import SortBySelect from "@components/FilterCategorySelect";
+import VirtualizedList from "@components/VirtualizedList";
+
+import styles from "./ShowsViewer.module.css";
 
 const ShowsViewer = observer(() => {
   const observer = useRef<IntersectionObserver>();

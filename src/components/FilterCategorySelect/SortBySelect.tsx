@@ -1,4 +1,5 @@
-import { Space, Select } from "antd";
+import { Select,Space } from "antd";
+
 import styles from "./SortBySelect.module.css";
 
 const sortByCategories = [
